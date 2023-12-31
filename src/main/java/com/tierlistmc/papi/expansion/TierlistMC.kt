@@ -33,7 +33,7 @@ class TierlistMC : PlaceholderExpansion() {
     }
 
     override fun getVersion(): String {
-        return "1.1"
+        return "1.2"
     }
 
     override fun onRequest(player: OfflinePlayer, params: String): String {
@@ -72,7 +72,16 @@ class TierlistMC : PlaceholderExpansion() {
                 if (field == "id") {
                     (cached[field] as? Double)?.toInt()?.toString() ?: ""
                 } else {
-                    cached[field] as? String? ?: ""
+                    if (cached[field] is String) {
+                        val name = cached[field] as? String? ?: ""
+                        if (name.isNotBlank() && !params.contains("nocol")) {
+                            config.getColor(tierType) + name
+                        } else {
+                            ""
+                        }
+                    } else {
+                        ""
+                    }
                 }
             } else {
                 ""
