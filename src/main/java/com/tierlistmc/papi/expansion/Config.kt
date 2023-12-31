@@ -35,8 +35,8 @@ class Config {
         return config.getString("language", "en")
     }
 
-    fun getCacheSeconds(): Int {
-        return config.getInt("cache-seconds", 60)
+    fun getCacheSeconds(): Long {
+        return config.getLong("cache-seconds", 60)
     }
 
     fun getColor(tierType: String): String {

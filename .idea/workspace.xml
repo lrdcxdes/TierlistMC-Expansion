@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3802f2bd-b13f-4837-a0c6-ee043d9d2056" name="Changes" comment="[+] Fix Auto-Build">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/gradle.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/gradle.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Api.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Api.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Config.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Config.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/TTLCache.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/TierlistMC.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/TierlistMC.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +127,7 @@
       <option name="presentableId" value="Default" />
       <updated>1703972725051</updated>
       <workItem from="1703972725053" duration="11902000" />
-      <workItem from="1704026033920" duration="2257000" />
+      <workItem from="1704026033920" duration="5200000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -182,7 +185,23 @@
       <option name="project" value="LOCAL" />
       <updated>1704028199850</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="[+] Fix Auto-Build">
+      <option name="closed" value="true" />
+      <created>1704028316849</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1704028316849</updated>
+    </task>
+    <task id="LOCAL-00009" summary="[+] Fix Auto-Build">
+      <option name="closed" value="true" />
+      <created>1704028366851</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1704028366851</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

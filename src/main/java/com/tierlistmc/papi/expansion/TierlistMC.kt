@@ -1,9 +1,11 @@
 package com.tierlistmc.papi.expansion
 
+import com.google.common.cache.CacheBuilder
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer
+import java.time.Instant
+import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
-import kotlin.time.Duration.Companion.seconds
 
 
 @Suppress("unused")
@@ -13,7 +15,25 @@ class TierlistMC : PlaceholderExpansion() {
     private val config = Config()
     private val api = Api(config, logger)
     private var isEnabled = false
-    private val cache: TTLCache<String, Map<String, Any?>> = TTLCacheImpl(config.getCacheSeconds().seconds, 1)
+
+    private val loader = object : com.google.common.cache.CacheLoader<String, Map<String, Any?>>() {
+        override fun load(key: String): Map<String, Any?> {
+            val args = key.split("-")
+            val playerId = args[0]
+            val tierType = args[1]
+            val future = api.playerCurrentTierData(playerId, tierType)
+            val tier: Tier = future.get() ?: return mapOf()
+            return mapOf(
+                "id" to tier.id,
+                "name" to tier.name,
+                "timestamp" to Instant.now().epochSecond
+            )
+        }
+    }
+
+    private val cache = CacheBuilder.newBuilder()
+        .expireAfterAccess(config.getCacheSeconds(), TimeUnit.SECONDS)
+        .build(loader)
 
     init {
         if (api.test()) {
@@ -36,7 +56,28 @@ class TierlistMC : PlaceholderExpansion() {
     }
 
     override fun getVersion(): String {
-        return "1.2"
+        return "1.3"
+    }
+
+    private fun getFromMap(map: Map<String, Any?>, tierType: String, field: String): String {
+        return if (map[field] != null) {
+            if (field == "id") {
+                (map[field] as? Double)?.toInt()?.toString() ?: ""
+            } else {
+                if (map[field] is String) {
+                    val name = map[field] as? String? ?: ""
+                    if (name.isNotBlank()) {
+                        config.getColor(tierType) + name
+                    } else {
+                        ""
+                    }
+                } else {
+                    ""
+                }
+            }
+        } else {
+            ""
+        }
     }
 
     override fun onRequest(player: OfflinePlayer, params: String): String {
@@ -69,44 +110,6 @@ class TierlistMC : PlaceholderExpansion() {
         }
 
         val cacheKey = "$playerId-$tierType"
-        val cached = cache.get(cacheKey)
-        if (cached != null) {
-            return if (cached[field] != null) {
-                if (field == "id") {
-                    (cached[field] as? Double)?.toInt()?.toString() ?: ""
-                } else {
-                    if (cached[field] is String) {
-                        val name = cached[field] as? String? ?: ""
-                        if (name.isNotBlank() && !params.contains("nocol")) {
-                            config.getColor(tierType) + name
-                        } else {
-                            ""
-                        }
-                    } else {
-                        ""
-                    }
-                }
-            } else {
-                ""
-            }
-        }
-
-        val future = api.playerCurrentTierData(playerId, tierType)
-        val data = future.get() ?: return ""
-        return if (data[field] != null) {
-            cache.add(cacheKey, data)
-            if (field == "id") {
-                (data[field] as? Double)?.toInt()?.toString() ?: ""
-            } else {
-                val name = data[field] as? String? ?: ""
-                if (name.isNotBlank() && !params.contains("nocol")) {
-                    config.getColor(tierType) + name
-                } else {
-                    ""
-                }
-            }
-        } else {
-            ""
-        }
+        return getFromMap(cache.get(cacheKey), tierType, field)
     }
 }

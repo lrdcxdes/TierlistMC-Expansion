@@ -1,5 +1,6 @@
 package com.tierlistmc.papi.expansion
 
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.Callback
 import okhttp3.ConnectionPool
@@ -8,6 +9,19 @@ import java.net.URL
 import java.net.URLEncoder
 import java.util.concurrent.CompletableFuture
 import java.util.logging.Logger
+
+@Serializable
+data class Tier(
+    val name: String,
+    val id: Int,
+)
+
+@Serializable
+data class Player(
+    val status: String,
+    val tier: Tier? = null,
+    val message: String? = null,
+)
 
 class Api(private val config: Config, private val logger: Logger) {
     // TODO: Batch requests
@@ -38,12 +52,12 @@ class Api(private val config: Config, private val logger: Logger) {
 
     private fun getJSON(
         url: String, vararg params: Pair<String, String>
-    ): CompletableFuture<Map<String, Any?>> {
+    ): CompletableFuture<Player> {
         val request = okhttp3.Request.Builder()
             .get()
             .url(builderUrl(url, params))
             .build()
-        val future = CompletableFuture<Map<String, Any?>>()
+        val future = CompletableFuture<Player>()
         client.newCall(request).enqueue(
             object : Callback {
                 override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
@@ -55,8 +69,8 @@ class Api(private val config: Config, private val logger: Logger) {
                 override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                     try {
                         val json = response.body?.string() ?: return
-                        val map = Json.decodeFromString<Map<String, Any?>>(json)
-                        future.complete(map)
+                        val player = Json.decodeFromString<Player>(json)
+                        future.complete(player)
                     } catch (e: Exception) {
                         logger.warning("Failed to parse JSON from $url")
                         e.printStackTrace()
@@ -84,13 +98,10 @@ class Api(private val config: Config, private val logger: Logger) {
         return URL(builder.toString())
     }
 
-    @Suppress("UNCHECKED_CAST")
-    fun playerCurrentTierData(username: String, tierType: String): CompletableFuture<Map<String, Any?>?> {
+    fun playerCurrentTierData(username: String, tierType: String): CompletableFuture<Tier?> {
         val future = getJSON("$baseURL/player/$username", "tier_type" to tierType)
         return future.thenApply { map ->
-            val data = map["data"] as Map<String, Any>? ?: return@thenApply null
-
-            data["tier"] as Map<String, Any?>? ?: return@thenApply null
+            map.tier
         }
     }
 
@@ -98,7 +109,7 @@ class Api(private val config: Config, private val logger: Logger) {
         val future = getJSON("$baseURL/test")
         return try {
             val data = future.get()
-            data["status"] as String == "success"
+            data.status == "success"
         } catch (e: Exception) {
             e.printStackTrace()
             false
