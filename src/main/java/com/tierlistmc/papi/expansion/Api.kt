@@ -1,45 +1,64 @@
 package com.tierlistmc.papi.expansion
 
-import com.google.gson.Gson
+import kotlinx.serialization.json.Json
 import okhttp3.Callback
+import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import java.net.URL
 import java.net.URLEncoder
 import java.util.concurrent.CompletableFuture
+import java.util.logging.Logger
 
-@Suppress("UNCHECKED_CAST")
-class Api(private val config: Config) {
-    private val client: OkHttpClient = OkHttpClient().newBuilder().build()
-    private val gson = Gson()
+class Api(private val config: Config, private val logger: Logger) {
+    // TODO: Batch requests
+
+    private val client: OkHttpClient =
+        OkHttpClient().newBuilder()
+            .readTimeout(config.getReadTimeout(), java.util.concurrent.TimeUnit.SECONDS)
+            .retryOnConnectionFailure(config.isRetryOnConnectionFailure())
+            .connectTimeout(config.getConnectTimeout(), java.util.concurrent.TimeUnit.SECONDS)
+            .connectionPool(
+                ConnectionPool(
+                    config.getMaxIdleConnections(),
+                    config.getKeepAliveDuration(),
+                    java.util.concurrent.TimeUnit.SECONDS
+                )
+            )
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("User-Agent", "TierlistMC-PAPI")
+                    .addHeader("Authorization", "Bearer ${config.getApiKey()}")
+                    .addHeader("Accept", "application/json")
+                    .addHeader("Accept-Language", config.getLanguage() ?: "en")
+                    .build()
+                chain.proceed(request)
+            }
+            .build()
     private val baseURL = "https://tierlistmc.com/papi"
 
     private fun getJSON(
         url: String, vararg params: Pair<String, String>
-    ): CompletableFuture<Map<String, Any>> {
+    ): CompletableFuture<Map<String, Any?>> {
         val request = okhttp3.Request.Builder()
             .get()
-            .addHeader("User-Agent", "TierlistMC-PAPI")
-            .addHeader("Authorization", "Bearer ${config.getApiKey()}")
-            .addHeader("Accept", "application/json")
-            .addHeader("Accept-Language", config.getLanguage() ?: "en")
             .url(builderUrl(url, params))
             .build()
-        val future = CompletableFuture<Map<String, Any>>()
+        val future = CompletableFuture<Map<String, Any?>>()
         client.newCall(request).enqueue(
             object : Callback {
                 override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
-                    println("Failed to get JSON from $url")
+                    logger.warning("Failed to get JSON from $url")
                     e.printStackTrace()
                     future.completeExceptionally(e)
                 }
 
                 override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                     try {
-                        val json = response.body!!.string()
-                        val map = gson.fromJson(json, Map::class.java)
-                        future.complete(map as Map<String, Any>)
+                        val json = response.body?.string() ?: return
+                        val map = Json.decodeFromString<Map<String, Any?>>(json)
+                        future.complete(map)
                     } catch (e: Exception) {
-                        println("Failed to get JSON from $url")
+                        logger.warning("Failed to parse JSON from $url")
                         e.printStackTrace()
                         future.completeExceptionally(e)
                     }
@@ -65,6 +84,7 @@ class Api(private val config: Config) {
         return URL(builder.toString())
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun playerCurrentTierData(username: String, tierType: String): CompletableFuture<Map<String, Any?>?> {
         val future = getJSON("$baseURL/player/$username", "tier_type" to tierType)
         return future.thenApply { map ->

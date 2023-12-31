@@ -16,6 +16,11 @@ class Config {
         config.addDefault("api-key", "paste-your-api-key-here")
         config.addDefault("language", "en")
         config.addDefault("cache-seconds", 60)
+        config.addDefault("read-timeout", 10)
+        config.addDefault("retry-on-connection-failure", true)
+        config.addDefault("connect-timeout", 10)
+        config.addDefault("max-idle-connections", 256)
+        config.addDefault("keep-alive-duration", 10)
         Color.entries.forEach { color ->
             config.addDefault("colors.${color.name}", " &f")
         }
@@ -36,5 +41,25 @@ class Config {
 
     fun getColor(tierType: String): String {
         return config.getString("colors.$tierType", " &f")!!
+    }
+
+    fun getReadTimeout(): Long {
+        return config.getLong("read-timeout", 10)
+    }
+
+    fun isRetryOnConnectionFailure(): Boolean {
+        return config.getBoolean("retry-on-connection-failure", true)
+    }
+
+    fun getConnectTimeout(): Long {
+        return config.getLong("connect-timeout", 10)
+    }
+
+    fun getMaxIdleConnections(): Int {
+        return config.getInt("max-idle-connections", 256)
+    }
+
+    fun getKeepAliveDuration(): Long {
+        return config.getLong("keep-alive-duration", 10)
     }
 }

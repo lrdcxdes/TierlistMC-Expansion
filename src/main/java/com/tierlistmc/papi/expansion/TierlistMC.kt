@@ -2,13 +2,16 @@ package com.tierlistmc.papi.expansion
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer
+import java.util.logging.Logger
 import kotlin.time.Duration.Companion.seconds
 
 
 @Suppress("unused")
 class TierlistMC : PlaceholderExpansion() {
+    private val logger = Logger.getLogger("PlaceholderAPI")
+
     private val config = Config()
-    private val api = Api(config)
+    private val api = Api(config, logger)
     private var isEnabled = false
     private val cache: TTLCache<String, Map<String, Any?>> = TTLCacheImpl(config.getCacheSeconds().seconds, 1)
 
@@ -16,7 +19,7 @@ class TierlistMC : PlaceholderExpansion() {
         if (api.test()) {
             isEnabled = true
         } else {
-            println("Failed to connect to TierlistMC API")
+            logger.warning("Failed to connect to TierlistMC API")
         }
     }
 
