@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3802f2bd-b13f-4837-a0c6-ee043d9d2056" name="Changes" comment="[+] Gradle files">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/gradle.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="3802f2bd-b13f-4837-a0c6-ee043d9d2056" name="Changes" comment="[+] Auto-Build">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/gradle.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/gradle.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +122,7 @@
       <option name="presentableId" value="Default" />
       <updated>1703972725051</updated>
       <workItem from="1703972725053" duration="11902000" />
-      <workItem from="1704026033920" duration="1972000" />
+      <workItem from="1704026033920" duration="2047000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -165,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1704027436974</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="[+] Auto-Build">
+      <option name="closed" value="true" />
+      <created>1704028029335</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1704028029335</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -187,6 +194,7 @@
     <MESSAGE value="Fix colors" />
     <MESSAGE value="[+] Optimize JSON Parsing&#10;[+] Use Connection Pooling for HTTP Requests&#10;[+] Optimized TTLCache" />
     <MESSAGE value="[+] Gradle files" />
-    <option name="LAST_COMMIT_MESSAGE" value="[+] Gradle files" />
+    <MESSAGE value="[+] Auto-Build" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+] Auto-Build" />
   </component>
 </project>
