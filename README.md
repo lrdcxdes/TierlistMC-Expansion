@@ -52,15 +52,15 @@ options:
 
 1. Download the latest release from
    the [releases page](https://github.com/lrdcxdes/TierlistMC-Expansion/releases/latest/download/Expansion-tierlistmc.jar).
-2. Place the downloaded `.jar` file into your server's `plugins` folder.
-3. Restart your server.
-4. Configure the plugin by editing the `tierlistmc.yml` file in the `PlaceholderAPI` plugin's data folder.
+2. Place the downloaded `.jar` file into your papi expansions `plugins/PlaceholderAPI/expansions` folder.
+3. Use `/papi reload` or Restart your server.
+4. Configure the expansion by editing the `tierlistmc.yml` file in the `plugins/PlaceholderAPI` plugin's data folder.
 5. Reload the plugin or restart your server again.
 
 ## Usage
 
 After installation and configuration, you can use the placeholders in any plugin that supports PlaceholderAPI. For
-example, in a chat plugin, you could display a player's current tier in their chat messages.
+example, in a chat / tab plugin, you could display a player's current tier in their chat messages / tab.
 
 ## Support
 
