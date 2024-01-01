@@ -4,10 +4,7 @@ import com.google.common.cache.CacheBuilder
 import com.google.common.cache.LoadingCache
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer
-import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerKickEvent
-import org.bukkit.event.player.PlayerQuitEvent
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
@@ -38,6 +35,8 @@ class TierlistMC : PlaceholderExpansion(), Listener {
     private val removeOnQuit = config.removeOnQuit()
     private val cache: LoadingCache<String, Map<String, Any?>>
 
+    private val listener: Listener
+
     init {
         if (api.test()) {
             isEnabled = true
@@ -48,18 +47,8 @@ class TierlistMC : PlaceholderExpansion(), Listener {
         cache = CacheBuilder.newBuilder()
             .expireAfterWrite(cacheSeconds, TimeUnit.SECONDS)
             .build(loader)
-    }
 
-    @EventHandler
-    fun onPlayerQuit(event: PlayerQuitEvent) {
-        if (!removeOnQuit) return
-        onPlayerLeave(event.player.name)
-    }
-
-    @EventHandler
-    fun onPlayerKick(event: PlayerKickEvent) {
-        if (!removeOnQuit) return
-        onPlayerLeave(event.player.name)
+        listener = LeaveListener(this)
     }
 
     override fun canRegister(): Boolean {
@@ -75,7 +64,7 @@ class TierlistMC : PlaceholderExpansion(), Listener {
     }
 
     override fun getVersion(): String {
-        return "1.4"
+        return "1.4.1"
     }
 
     private fun getFromMap(map: Map<String, Any?>, tierType: String, field: String): String {
@@ -99,7 +88,7 @@ class TierlistMC : PlaceholderExpansion(), Listener {
         }
     }
 
-    private fun onPlayerLeave(playerName: String) {
+    fun onPlayerLeave(playerName: String) {
         val key = "$playerName-"
         val keys = cache.asMap().keys.filter { it.startsWith(key) }
         keys.forEach { cache.invalidate(it) }
