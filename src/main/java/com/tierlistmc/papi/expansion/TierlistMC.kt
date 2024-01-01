@@ -75,7 +75,7 @@ class TierlistMC : PlaceholderExpansion(), Listener {
     }
 
     override fun getVersion(): String {
-        return "1.3"
+        return "1.4"
     }
 
     private fun getFromMap(map: Map<String, Any?>, tierType: String, field: String): String {
