@@ -2,27 +2,22 @@ package com.tierlistmc.papi.expansion
 
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.YamlConfiguration
+import java.util.logging.Logger
 
-class Config {
+class Config(private val logger: Logger) {
     private val file = Bukkit.getPluginManager().getPlugin("PlaceholderAPI")!!.dataFolder.resolve("tierlistmc.yml")
     private val config: YamlConfiguration
 
     init {
-        if (!file.exists()) {
-            file.createNewFile()
-        }
-        config = YamlConfiguration.loadConfiguration(file)
-        config.options().copyDefaults(true)
-        config.addDefault("api-key", "paste-your-api-key-here")
-        config.addDefault("language", "en")
-        config.addDefault("cache-seconds", 60)
-        config.addDefault("read-timeout", 10)
-        config.addDefault("retry-on-connection-failure", true)
-        config.addDefault("connect-timeout", 10)
-        config.addDefault("max-idle-connections", 256)
-        config.addDefault("keep-alive-duration", 10)
-        Color.entries.forEach { color ->
-            config.addDefault("colors.${color.name}", " &f")
+        val resource = TierlistMC::class.java.getResourceAsStream("/tierlistmc.yml")!!
+        val defaultConfig = YamlConfiguration.loadConfiguration(resource.reader())
+        config = if (file.exists()) {
+            YamlConfiguration.loadConfiguration(file.reader()).apply {
+                setDefaults(defaultConfig)
+                options().copyDefaults(true)
+            }
+        } else {
+            defaultConfig
         }
         config.save(file)
     }
@@ -37,10 +32,6 @@ class Config {
 
     fun getCacheSeconds(): Long {
         return config.getLong("cache-seconds", 60)
-    }
-
-    fun getColor(tierType: String): String {
-        return config.getString("colors.$tierType", " &f")!!
     }
 
     fun getReadTimeout(): Long {
@@ -61,5 +52,17 @@ class Config {
 
     fun getKeepAliveDuration(): Long {
         return config.getLong("keep-alive-duration", 10)
+    }
+
+    fun removeOnQuit(): Boolean {
+        return config.getBoolean("remove-on-quit", true)
+    }
+
+    fun getFormat(tierType: String): String {
+        val value = config.getString("formats.$tierType", "&f{name}")!!
+        if (!value.contains("{name}")) {
+            logger.warning("Invalid format for tier type $tierType: $value")
+        }
+        return value
     }
 }

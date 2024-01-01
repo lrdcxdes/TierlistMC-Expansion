@@ -1,0 +1,34 @@
+# API Key, get one at https://tierlistmc.com/api (You can use the public key for testing.)
+api-key: PUBLIC
+
+# The language to use for the tier names (en => HT3, ru => T3H, etc.)
+language: en
+# Cache time in seconds, 0 to disable. (Recommended: 60)
+cache-seconds: 60
+# Remove player data from the cache when they quit the server. (Recommended: true)
+remove-on-quit: true
+
+# OKHTTP Client settings
+# (See https://square.github.io/okhttp/5.x/okhttp/okhttp3/-ok-http-client/-builder/index.html)
+# Timeout to read player data from the API. (Recommended: 10)
+read-timeout: 10
+# Timeout to connect to the API. (Recommended: 10)
+connect-timeout: 10
+# Retry on connection failure. (Recommended: true)
+retry-on-connection-failure: true
+# Max idle connections to keep in the pool. (Recommended: 256)
+max-idle-connections: 256
+# Keep alive duration for idle connections. (Recommended: 10)
+keep-alive-duration: 10
+
+# Formats for the tier names. (You can use any formatting supported by the plugin where you use placeholders.)
+# Example with hex: (Needs hex support where you use it.)
+#
+# formats:
+#  NETHERPOT: ' &7「&#A32FEF🧪 {name}7」'
+#  DIAMOND: ' &7「&#26B3EF🗡 {name}7」'
+#  CRYSTAL: ' &7「&#EE4EE8✳ {name}7」'
+formats:
+  NETHERPOT: '&f{name}'
+  DIAMOND: '&f{name}'
+  CRYSTAL: '&f{name}'

@@ -1,18 +1,23 @@
 package com.tierlistmc.papi.expansion
 
 import com.google.common.cache.CacheBuilder
+import com.google.common.cache.LoadingCache
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerKickEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import java.util.logging.Logger
 
 
 @Suppress("unused")
-class TierlistMC : PlaceholderExpansion() {
+class TierlistMC : PlaceholderExpansion(), Listener {
     private val logger = Logger.getLogger("PlaceholderAPI")
 
-    private val config = Config()
+    private val config = Config(logger)
     private val api = Api(config, logger)
     private var isEnabled = false
 
@@ -24,16 +29,14 @@ class TierlistMC : PlaceholderExpansion() {
             val future = api.playerCurrentTierData(playerId, tierType)
             val tier: Tier = future.get() ?: return mapOf()
             return mapOf(
-                "id" to tier.id,
-                "name" to tier.name,
-                "timestamp" to Instant.now().epochSecond
+                "id" to tier.id, "name" to tier.name, "timestamp" to Instant.now().epochSecond
             )
         }
     }
 
-    private val cache = CacheBuilder.newBuilder()
-        .expireAfterAccess(config.getCacheSeconds(), TimeUnit.SECONDS)
-        .build(loader)
+    private val cacheSeconds = config.getCacheSeconds()
+    private val removeOnQuit = config.removeOnQuit()
+    private val cache: LoadingCache<String, Map<String, Any?>>
 
     init {
         if (api.test()) {
@@ -41,6 +44,22 @@ class TierlistMC : PlaceholderExpansion() {
         } else {
             logger.warning("Failed to connect to TierlistMC API")
         }
+
+        cache = CacheBuilder.newBuilder()
+            .expireAfterWrite(cacheSeconds, TimeUnit.SECONDS)
+            .build(loader)
+    }
+
+    @EventHandler
+    fun onPlayerQuit(event: PlayerQuitEvent) {
+        if (!removeOnQuit) return
+        onPlayerLeave(event.player.name)
+    }
+
+    @EventHandler
+    fun onPlayerKick(event: PlayerKickEvent) {
+        if (!removeOnQuit) return
+        onPlayerLeave(event.player.name)
     }
 
     override fun canRegister(): Boolean {
@@ -67,7 +86,7 @@ class TierlistMC : PlaceholderExpansion() {
                 if (map[field] is String) {
                     val name = map[field] as? String? ?: ""
                     if (name.isNotBlank()) {
-                        config.getColor(tierType) + name
+                        config.getFormat(tierType).replace("{name}", name)
                     } else {
                         ""
                     }
@@ -78,6 +97,12 @@ class TierlistMC : PlaceholderExpansion() {
         } else {
             ""
         }
+    }
+
+    private fun onPlayerLeave(playerName: String) {
+        val key = "$playerName-"
+        val keys = cache.asMap().keys.filter { it.startsWith(key) }
+        keys.forEach { cache.invalidate(it) }
     }
 
     override fun onRequest(player: OfflinePlayer, params: String): String {
@@ -94,7 +119,7 @@ class TierlistMC : PlaceholderExpansion() {
         }
 
         var tierType = args.getOrNull(1) ?: return "%tier_type_is_invalid%"
-        if (tierType.isBlank()) {
+        if (tierType.isBlank() || !isTierTypeExists(tierType)) {
             return "%tier_type_is_invalid%"
         }
         tierType = tierType.lowercase()
