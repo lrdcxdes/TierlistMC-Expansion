@@ -38,7 +38,7 @@ The configuration file `tierlistmc.yml` is located in the `PlaceholderAPI` plugi
 options:
 
 - `api-key`: Your API key for the TierlistMC API.
-- `language`: The language to use for messages (default: "en").
+- `language`: The language to use for tier names (default: "en").
 - `cache-seconds`: The duration to keep data in the cache (default: 60).
 - `read-timeout`: The read timeout for API calls (default: 10).
 - `retry-on-connection-failure`: Whether to retry API calls on connection failure (default: true).
