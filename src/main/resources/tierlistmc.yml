@@ -5,8 +5,10 @@ api-key: PUBLIC
 language: en
 # Cache time in seconds, 0 to disable. (Recommended: 60)
 cache-seconds: 60
-# Remove player data from the cache when they quit the server. (Recommended: true)
-remove-on-quit: true
+# Update interval in ticks, DO NOT SET THIS TOO LOW! (Recommended: 20+)
+update-interval: 20
+# Max batch size for the API. (Recommended: 100)
+max-batch-size: 100
 
 # OKHTTP Client settings
 # (See https://square.github.io/okhttp/5.x/okhttp/okhttp3/-ok-http-client/-builder/index.html)

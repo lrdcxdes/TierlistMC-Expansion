@@ -1,12 +1,13 @@
 package com.tierlistmc.papi.expansion
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.Callback
 import okhttp3.ConnectionPool
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
-import java.net.URL
-import java.net.URLEncoder
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.util.concurrent.CompletableFuture
 import java.util.logging.Logger
 
@@ -18,10 +19,19 @@ data class Tier(
 
 @Serializable
 data class Player(
-    val status: String,
-    val tier: Tier? = null,
-    val message: String? = null,
+    val username: String,
+    val tiers: Map<String, Tier>
 )
+
+@Serializable
+data class BatchResponse(
+    val status: String,
+    val message: String? = null,
+    val result: List<Player>? = null
+)
+
+@Serializable
+data class Batch(val batch: List<String>)
 
 class Api(private val config: Config, private val logger: Logger) {
     // TODO: Batch requests
@@ -50,18 +60,19 @@ class Api(private val config: Config, private val logger: Logger) {
             .build()
     private val baseURL = "https://tierlistmc.com/papi"
 
-    private fun getJSON(
-        url: String, vararg params: Pair<String, String>
-    ): CompletableFuture<Player> {
+    fun batchRequest(batches: Batch): CompletableFuture<List<Player>> {
+        val future = CompletableFuture<List<Player>>()
         val request = okhttp3.Request.Builder()
-            .get()
-            .url(builderUrl(url, params))
+            .post(
+                Json.encodeToString(batches)
+                    .toRequestBody("application/json".toMediaTypeOrNull())
+            )
+            .url("$baseURL/batch")
             .build()
-        val future = CompletableFuture<Player>()
         client.newCall(request).enqueue(
             object : Callback {
                 override fun onFailure(call: okhttp3.Call, e: java.io.IOException) {
-                    logger.warning("Failed to get JSON from $url")
+                    logger.warning("Failed to get JSON from $baseURL/batch")
                     e.printStackTrace()
                     future.completeExceptionally(e)
                 }
@@ -69,10 +80,16 @@ class Api(private val config: Config, private val logger: Logger) {
                 override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
                     try {
                         val json = response.body?.string() ?: return
-                        val player = Json.decodeFromString<Player>(json)
-                        future.complete(player)
+                        val batch = Json.decodeFromString<BatchResponse>(json)
+                        if (batch.status != "success") {
+                            logger.warning("Failed to get JSON from $baseURL/batch")
+                            logger.warning(batch.message ?: "Unknown error")
+                            future.completeExceptionally(Exception(batch.message))
+                            return
+                        }
+                        future.complete(batch.result!!)
                     } catch (e: Exception) {
-                        logger.warning("Failed to parse JSON from $url")
+                        logger.warning("Failed to parse JSON from $baseURL/batch")
                         e.printStackTrace()
                         future.completeExceptionally(e)
                     }
@@ -82,34 +99,14 @@ class Api(private val config: Config, private val logger: Logger) {
         return future
     }
 
-    private fun builderUrl(url: String, params: Array<out Pair<String, String>>): URL {
-        val builder = StringBuilder(url)
-        if (params.isNotEmpty()) {
-            builder.append("?")
-            params.forEachIndexed { index, pair ->
-                builder.append(pair.first)
-                builder.append("=")
-                builder.append(URLEncoder.encode(pair.second, "UTF-8"))
-                if (index != params.size - 1) {
-                    builder.append("&")
-                }
-            }
-        }
-        return URL(builder.toString())
-    }
-
-    fun playerCurrentTierData(username: String, tierType: String): CompletableFuture<Tier?> {
-        val future = getJSON("$baseURL/player/$username", "tier_type" to tierType)
-        return future.thenApply { map ->
-            map.tier
-        }
-    }
-
     fun test(): Boolean {
-        val future = getJSON("$baseURL/test")
+        val request = okhttp3.Request.Builder()
+            .get()
+            .url("$baseURL/test")
+            .build()
         return try {
-            val data = future.get()
-            data.status == "success"
+            val data = client.newCall(request).execute().body?.string() ?: return false
+            data.contains("success")
         } catch (e: Exception) {
             e.printStackTrace()
             false

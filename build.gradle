@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.tierlistmc.papi"
-version = "1.4.1"
+version = "1.5"
 
 repositories {
     mavenCentral()
@@ -46,10 +46,23 @@ kotlin {
     jvmToolchain(17)
 }
 
+tasks.register('copyShadowJarToServer', Copy) {
+    dependsOn shadowJar
+    from "build/libs"
+    into "C:/Users/lord/IdeaProjects/OlympTestServer/plugins/PlaceholderAPI/expansions"
+    include("Expansion-tierlistmc.jar")
+}
+
 shadowJar {
     archiveFileName.set("Expansion-tierlistmc.jar")
     archiveClassifier.set("")
     manifest {
         attributes["Main-Class"] = "com.tierlistmc.papi.expansion.TierlistMC"
     }
+    destinationDirectory.set(file("build/libs"))
+}
+
+tasks.build {
+    dependsOn shadowJar
+    dependsOn copyShadowJarToServer
 }

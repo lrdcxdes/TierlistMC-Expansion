@@ -54,15 +54,19 @@ class Config(private val logger: Logger) {
         return config.getLong("keep-alive-duration", 10)
     }
 
-    fun removeOnQuit(): Boolean {
-        return config.getBoolean("remove-on-quit", true)
-    }
-
     fun getFormat(tierType: String): String {
         val value = config.getString("formats.$tierType", "&f{name}")!!
         if (!value.contains("{name}")) {
             logger.warning("Invalid format for tier type $tierType: $value")
         }
         return value
+    }
+
+    fun getUpdateInterval(): Long {
+        return config.getLong("update-interval", 20)
+    }
+
+    fun getMaxBatchSize(): Int {
+        return config.getInt("max-batch-size", 100)
     }
 }
