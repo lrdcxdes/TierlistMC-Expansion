@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.tierlistmc.papi"
-version = "1.5-hotfix01"
+version = "1.5-hotfix02"
 
 repositories {
     mavenCentral()

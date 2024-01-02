@@ -14,7 +14,7 @@ import java.util.logging.Logger
 @Serializable
 data class Tier(
     val name: String,
-    val id: Int,
+    val id: Int? = null,
 )
 
 @Serializable
