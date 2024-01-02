@@ -2,14 +2,16 @@ package com.tierlistmc.papi.expansion
 
 import me.clip.placeholderapi.PlaceholderAPIPlugin
 import me.clip.placeholderapi.expansion.PlaceholderExpansion
+import me.clip.placeholderapi.expansion.Taskable
 import org.bukkit.OfflinePlayer
 import org.bukkit.event.Listener
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scheduler.BukkitTask
 import java.util.logging.Logger
 
 
 @Suppress("unused")
-class TierlistMC : PlaceholderExpansion(), Listener {
+class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
     private val logger = Logger.getLogger("PlaceholderAPI")
 
     private val config = Config(logger)
@@ -23,6 +25,9 @@ class TierlistMC : PlaceholderExpansion(), Listener {
 
     private val queue: MutableList<String> = mutableListOf()
 
+    private var updateRunnableTask: BukkitTask? = null
+    private var cacheRunnableTask: BukkitTask? = null
+
     private fun putInQueue(playerId: String) {
         queue.add(playerId)
     }
@@ -32,13 +37,6 @@ class TierlistMC : PlaceholderExpansion(), Listener {
             isEnabled = true
         } else {
             logger.warning("Failed to connect to TierlistMC API")
-        }
-
-        try {
-            createTasks()
-        } catch (e: Exception) {
-            logger.warning("Failed to create task")
-            e.printStackTrace()
         }
     }
 
@@ -55,7 +53,7 @@ class TierlistMC : PlaceholderExpansion(), Listener {
     }
 
     override fun getVersion(): String {
-        return "1.5-hotfix02"
+        return "1.5-hotfix03"
     }
 
     override fun onRequest(player: OfflinePlayer, params: String): String {
@@ -144,7 +142,21 @@ class TierlistMC : PlaceholderExpansion(), Listener {
             }
         }
 
-        updateRunnable.runTaskTimerAsynchronously(plugin!!, 0, updateInterval)
-        cacheRunnable.runTaskTimerAsynchronously(plugin!!, cacheSeconds * 20, cacheSeconds * 20)
+        updateRunnableTask = updateRunnable.runTaskTimerAsynchronously(plugin!!, 0, updateInterval)
+        cacheRunnableTask = cacheRunnable.runTaskTimerAsynchronously(plugin!!, cacheSeconds * 20, cacheSeconds * 20)
+    }
+
+    override fun start() {
+        try {
+            createTasks()
+        } catch (e: Exception) {
+            logger.warning("Failed to create task")
+            e.printStackTrace()
+        }
+    }
+
+    override fun stop() {
+        updateRunnableTask?.cancel()
+        cacheRunnableTask?.cancel()
     }
 }

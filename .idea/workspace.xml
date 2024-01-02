@@ -9,10 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3802f2bd-b13f-4837-a0c6-ee043d9d2056" name="Changes" comment="[+] Hotfix 0.1 Formats">
+    <list default="true" id="3802f2bd-b13f-4837-a0c6-ee043d9d2056" name="Changes" comment="[+] Hotfix 0.2 Current Testing Tiers caused errors">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Api.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Api.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/TierlistMC.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/TierlistMC.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -178,7 +177,7 @@
       <workItem from="1704026033920" duration="7104000" />
       <workItem from="1704064209118" duration="2390000" />
       <workItem from="1704117148017" duration="4422000" />
-      <workItem from="1704209694017" duration="7934000" />
+      <workItem from="1704209694017" duration="8944000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -308,7 +307,15 @@
       <option name="project" value="LOCAL" />
       <updated>1704216030815</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="[+] Hotfix 0.2 Current Testing Tiers caused errors">
+      <option name="closed" value="true" />
+      <created>1704224151552</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1704224151552</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -339,6 +346,7 @@
     <MESSAGE value="Update README.md" />
     <MESSAGE value="[+] Batch requests&#10;[+] Asynchronous requests&#10;[+] max-batch-size and update-interval configuration&#10;[-] Removed &quot;id&quot; field&#10;[-] Removed on-quit listener and configuration" />
     <MESSAGE value="[+] Hotfix 0.1 Formats" />
-    <option name="LAST_COMMIT_MESSAGE" value="[+] Hotfix 0.1 Formats" />
+    <MESSAGE value="[+] Hotfix 0.2 Current Testing Tiers caused errors" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+] Hotfix 0.2 Current Testing Tiers caused errors" />
   </component>
 </project>
