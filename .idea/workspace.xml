@@ -9,18 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3802f2bd-b13f-4837-a0c6-ee043d9d2056" name="Changes" comment="Update README.md">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/TierlistMC_main_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="3802f2bd-b13f-4837-a0c6-ee043d9d2056" name="Changes" comment="[+] Batch requests&#10;[+] Asynchronous requests&#10;[+] max-batch-size and update-interval configuration&#10;[-] Removed &quot;id&quot; field&#10;[-] Removed on-quit listener and configuration">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Api.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Api.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Config.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/Config.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/LeaveListener.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/TierlistMC.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/TierlistMC.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/tierlistmc.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/tierlistmc.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +98,7 @@
       <recent name="C:\Users\lord\IdeaProjects\TierlistMC\src" />
     </key>
   </component>
-  <component name="RunManager" selected="JAR Application.debug">
+  <component name="RunManager" selected="Gradle.TierlistMC [shadowJar]">
     <configuration name="TierlistMC [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -185,7 +178,7 @@
       <workItem from="1704026033920" duration="7104000" />
       <workItem from="1704064209118" duration="2390000" />
       <workItem from="1704117148017" duration="4422000" />
-      <workItem from="1704209694017" duration="5937000" />
+      <workItem from="1704209694017" duration="6201000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -299,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1704120896935</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="[+] Batch requests&#10;[+] Asynchronous requests&#10;[+] max-batch-size and update-interval configuration&#10;[-] Removed &quot;id&quot; field&#10;[-] Removed on-quit listener and configuration">
+      <option name="closed" value="true" />
+      <created>1704215760506</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1704215760506</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -328,6 +329,7 @@
     <MESSAGE value="version 1.4" />
     <MESSAGE value="[+] LeaveListener improvements" />
     <MESSAGE value="Update README.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update README.md" />
+    <MESSAGE value="[+] Batch requests&#10;[+] Asynchronous requests&#10;[+] max-batch-size and update-interval configuration&#10;[-] Removed &quot;id&quot; field&#10;[-] Removed on-quit listener and configuration" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+] Batch requests&#10;[+] Asynchronous requests&#10;[+] max-batch-size and update-interval configuration&#10;[-] Removed &quot;id&quot; field&#10;[-] Removed on-quit listener and configuration" />
   </component>
 </project>

@@ -55,7 +55,7 @@ class Config(private val logger: Logger) {
     }
 
     fun getFormat(tierType: String): String {
-        val value = config.getString("formats.$tierType", "&f{name}")!!
+        val value = config.getString("formats.${tierType.uppercase()}", "&f{name}")!!
         if (!value.contains("{name}")) {
             logger.warning("Invalid format for tier type $tierType: $value")
         }
