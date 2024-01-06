@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.event.Listener
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
+import java.util.concurrent.CompletableFuture
 import java.util.logging.Logger
 
 
@@ -73,10 +74,10 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
 
         if (playerId == null) {
             playerId = args.getOrNull(1) ?: return "%player_is_invalid%"
+        }
 
-            if (playerId.isBlank() || playerId.length < 3 || playerId.length > 16) {
-                return "%player_is_invalid%"
-            }
+        if (playerId.isBlank() || playerId.length < 3 || playerId.length > 16) {
+            return "%player_is_invalid%"
         }
 
         if (!cache.containsKey(playerId)) {
@@ -118,7 +119,16 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
                     batchPlayers.add(playerId)
                 }
 
-                val future = api.batchRequest(Batch(batchPlayers))
+                val future: CompletableFuture<List<Player>>
+
+                try {
+                    future = api.batchRequest(Batch(batchPlayers))
+                } catch (e: Exception) {
+                    logger.warning("Failed to get JSON")
+                    e.printStackTrace()
+                    logger.warning("BatchPlayers: $batchPlayers")
+                    return
+                }
 
                 future.thenAcceptAsync { players ->
                     for (player in players) {

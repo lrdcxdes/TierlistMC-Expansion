@@ -9,9 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3802f2bd-b13f-4837-a0c6-ee043d9d2056" name="Changes" comment="[+] Hotfix 0.2 Current Testing Tiers caused errors">
+    <list default="true" id="3802f2bd-b13f-4837-a0c6-ee043d9d2056" name="Changes" comment="[+] Hotfix 0.3 tasks were not canceled at /papi reload">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/TierlistMC.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/tierlistmc/papi/expansion/TierlistMC.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,30 +66,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "WebServerToolWindowPanel.toolwindow.highlight.mappings": "true",
-    "WebServerToolWindowPanel.toolwindow.highlight.symlinks": "true",
-    "WebServerToolWindowPanel.toolwindow.show.date": "false",
-    "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
-    "WebServerToolWindowPanel.toolwindow.show.size": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/lord/IdeaProjects/TierlistMC",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.25375",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.mappings&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.symlinks&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.date&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.permissions&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.size&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/lord/IdeaProjects/TierlistMC&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.25375&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\lord\IdeaProjects\TierlistMC" />
@@ -177,7 +176,10 @@
       <workItem from="1704026033920" duration="7104000" />
       <workItem from="1704064209118" duration="2390000" />
       <workItem from="1704117148017" duration="4422000" />
-      <workItem from="1704209694017" duration="8944000" />
+      <workItem from="1704209694017" duration="10093000" />
+      <workItem from="1704295890193" duration="25000" />
+      <workItem from="1704372018543" duration="1820000" />
+      <workItem from="1704503193630" duration="345000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -315,7 +317,15 @@
       <option name="project" value="LOCAL" />
       <updated>1704224151552</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="[+] Hotfix 0.3 tasks were not canceled at /papi reload">
+      <option name="closed" value="true" />
+      <created>1704225180626</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1704225180626</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -347,6 +357,7 @@
     <MESSAGE value="[+] Batch requests&#10;[+] Asynchronous requests&#10;[+] max-batch-size and update-interval configuration&#10;[-] Removed &quot;id&quot; field&#10;[-] Removed on-quit listener and configuration" />
     <MESSAGE value="[+] Hotfix 0.1 Formats" />
     <MESSAGE value="[+] Hotfix 0.2 Current Testing Tiers caused errors" />
-    <option name="LAST_COMMIT_MESSAGE" value="[+] Hotfix 0.2 Current Testing Tiers caused errors" />
+    <MESSAGE value="[+] Hotfix 0.3 tasks were not canceled at /papi reload" />
+    <option name="LAST_COMMIT_MESSAGE" value="[+] Hotfix 0.3 tasks were not canceled at /papi reload" />
   </component>
 </project>
