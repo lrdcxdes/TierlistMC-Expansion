@@ -59,7 +59,7 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
     }
 
     override fun getVersion(): String {
-        return "1.5-hotfix03"
+        return "1.6"
     }
 
     override fun onRequest(player: OfflinePlayer, params: String): String {
