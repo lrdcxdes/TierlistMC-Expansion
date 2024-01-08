@@ -24,12 +24,17 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
     private val updateInterval = config.getUpdateInterval()
     private var plugin: PlaceholderAPIPlugin? = null
 
-    private val queue: MutableList<String> = mutableListOf()
+    private val queue: MutableSet<String> = mutableSetOf()
 
     private var updateRunnableTask: BukkitTask? = null
     private var cacheRunnableTask: BukkitTask? = null
 
+    private var nowUpdating = false
+
     private fun putInQueue(playerId: String) {
+        if (queue.contains(playerId)) {
+            return
+        }
         queue.add(playerId)
     }
 
@@ -64,30 +69,24 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
             params.split("_")
         }
 
-        var tierType = args.getOrNull(0) ?: return "%tier_type_is_invalid%"
+        val tierType = args.getOrNull(0)?.lowercase() ?: return "%tier_type_is_invalid%"
         if (tierType.isBlank() || !isTierTypeExists(tierType)) {
             return "%tier_type_is_invalid%"
         }
-        tierType = tierType.lowercase()
 
         var playerId = player.name?.lowercase()
-
-        if (playerId == null) {
-            playerId = args.getOrNull(1) ?: return "%player_is_invalid%"
-        }
+        playerId = playerId ?: args.getOrNull(1)?.lowercase() ?: return "%player_is_invalid%"
 
         if (playerId.isBlank() || playerId.length < 3 || playerId.length > 16) {
             return "%player_is_invalid%"
         }
 
-        if (!cache.containsKey(playerId)) {
+        val data = cache.computeIfAbsent(playerId) {
             putInQueue(playerId)
-            return ""
+            mutableMapOf()
         }
 
-        val data = cache[playerId]
-
-        val name = data?.get(tierType)?.name ?: return ""
+        val name = data[tierType]?.name ?: return ""
         return if (name.isNotBlank()) {
             config.getFormat(tierType).replace("{name}", name)
         } else {
@@ -101,24 +100,13 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
         }
         val updateRunnable = object : BukkitRunnable() {
             override fun run() {
-                if (queue.isEmpty()) {
+                if (nowUpdating || queue.isEmpty()) {
                     return
                 }
 
-                val batchPlayers = mutableListOf<String>()
+                nowUpdating = true
 
-                for (playerId in queue.toList()) {
-                    if (batchPlayers.size >= config.getMaxBatchSize()) {
-                        break
-                    }
-
-                    if (batchPlayers.contains(playerId)) {
-                        continue
-                    }
-
-                    batchPlayers.add(playerId)
-                    queue.remove(playerId)
-                }
+                val batchPlayers = queue.take(config.getMaxBatchSize())
 
                 val future: CompletableFuture<List<Player>>
 
@@ -128,20 +116,25 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
                     logger.warning("Failed to get JSON")
                     e.printStackTrace()
                     logger.warning("BatchPlayers: $batchPlayers")
+                    nowUpdating = false
                     return
                 }
 
-                future.thenAcceptAsync { players ->
-                    for (player in players) {
+                future.thenAcceptAsync { player ->
+                    for (p in player) {
                         val tiers = mutableMapOf<String, Tier>()
 
-                        for (tier in player.tiers) {
+                        for (tier in p.tiers) {
                             tiers[tier.key] = Tier(tier.value.name, tier.value.id)
                         }
 
-                        cache[player.username.lowercase()] = tiers
+                        cache[p.username.lowercase()] = tiers
                     }
                 }
+
+                queue -= batchPlayers.toSet()
+
+                nowUpdating = false
             }
         }
 
@@ -167,5 +160,11 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
     override fun stop() {
         updateRunnableTask?.cancel()
         cacheRunnableTask?.cancel()
+
+        updateRunnableTask = null
+        cacheRunnableTask = null
+
+        cache.clear()
+        queue.clear()
     }
 }
