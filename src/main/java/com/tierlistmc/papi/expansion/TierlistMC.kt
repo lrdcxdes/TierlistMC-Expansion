@@ -117,6 +117,7 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
                     }
 
                     batchPlayers.add(playerId)
+                    queue.remove(playerId)
                 }
 
                 val future: CompletableFuture<List<Player>>
@@ -140,8 +141,6 @@ class TierlistMC : PlaceholderExpansion(), Listener, Taskable {
 
                         cache[player.username.lowercase()] = tiers
                     }
-
-                    queue.removeAll(batchPlayers)
                 }
             }
         }
